@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="civic">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="VoteWise — Your complete interactive guide to understanding the democratic election process, voter rights, and civic participation." />
+  <meta name="keywords" content="election process, how to vote, voter registration, democracy, civic education, polling station" />
+  <meta name="author" content="VoteWise Civic Platform" />
+  <meta name="theme-color" content="#1B4332" />
+  <meta property="og:title" content="VoteWise | Election Education Platform" />
+  <meta property="og:description" content="Learn the complete election process interactively — timelines, steps, quizzes and AI-powered assistance." />
+  <meta property="og:type" content="website" />
+  <title>VoteWise | Interactive Election Education</title>
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" />
+  <link rel="preconnect" href="https://maps.googleapis.com" />
+
+  <!-- Google Fonts — completely different from v1 -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Google Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+
+  <!-- Firebase SDK v10 (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js" defer></script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "VoteWise",
+    "description": "Interactive election education platform with AI assistant",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "inLanguage": "en-US",
+    "audience": { "@type": "EducationalAudience", "educationalRole": "student" }
+  }
+  </script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Accessibility: skip nav -->
+  <a href="#app-root" class="skip-nav" role="link" aria-label="Skip to main content">Skip Navigation</a>
+
+  <!-- TOP PROGRESS BAR -->
+  <div id="page-progress" class="page-progress" role="progressbar" aria-label="Page scroll progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+  <!-- ── SIDEBAR NAV ── -->
+  <aside id="sidebar" class="sidebar" role="complementary" aria-label="Site navigation sidebar">
+    <div class="sidebar-brand" role="banner">
+      <span class="brand-icon" aria-hidden="true">⚖️</span>
+      <span class="brand-name">Vote<em>Wise</em></span>
+    </div>
+
+    <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+      <ul role="list">
+        <li><a href="#hero"      class="snav-link" data-section="hero"      aria-label="Go to home section"><span class="snav-icon" aria-hidden="true"><i class="material-icons-round">home</i></span><span class="snav-text">Home</span></a></li>
+        <li><a href="#process"   class="snav-link" data-section="process"   aria-label="Go to election process section"><span class="snav-icon" aria-hidden="true"><i class="material-icons-round">timeline</i></span><span class="snav-text">Process</span></a></li>
+        <li><a href="#steps"     class="snav-link" data-section="steps"     aria-label="Go to voting steps section"><span class="snav-icon" aria-hidden="true"><i class="material-icons-round">checklist</i></span><span class="snav-text">Steps</span></a></li>
+        <li><a href="#knowledge" class="snav-link" data-section="knowledge" aria-label="Go to knowledge quiz"><span class="snav-icon" aria-hidden="true"><i class="material-icons-round">quiz</i></span><span class="snav-text">Quiz</span></a></li>
+        <li><a href="#maps"      class="snav-link" data-section="maps"      aria-label="Find polling station on map"><span class="snav-icon" aria-hidden="true"><i class="material-icons-round">map</i></span><span class="snav-text">Find Station</span></a></li>
+        <li><a href="#assistant" class="snav-link" data-section="assistant" aria-label="Open AI election assistant"><span class="snav-icon" aria-hidden="true"><i class="material-icons-round">smart_toy</i></span><span class="snav-text">AI Help</span></a></li>
+        <li><a href="#tests"     class="snav-link" data-section="tests"     aria-label="View automated test results"><span class="snav-icon" aria-hidden="true"><i class="material-icons-round">science</i></span><span class="snav-text">Tests</span></a></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer" aria-label="Sidebar footer">
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+        <i class="material-icons-round" aria-hidden="true">contrast</i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MOBILE TOPBAR -->
+  <header class="topbar" role="banner" aria-label="Mobile header">
+    <button id="mob-toggle" class="mob-toggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mob-drawer">
+      <i class="material-icons-round" aria-hidden="true">menu</i>
+    </button>
+    <span class="topbar-brand" aria-label="VoteWise logo">⚖️ Vote<em>Wise</em></span>
+    <div class="topbar-spacer" aria-hidden="true"></div>
+  </header>
+
+  <!-- MOBILE DRAWER -->
+  <div id="mob-drawer" class="mob-drawer" role="dialog" aria-modal="true" aria-label="Mobile navigation menu" aria-hidden="true">
+    <div class="mob-drawer-inner">
+      <button class="mob-close" id="mob-close" aria-label="Close navigation menu">
+        <i class="material-icons-round" aria-hidden="true">close</i>
+      </button>
+      <nav role="navigation" aria-label="Mobile navigation">
+        <ul role="list">
+          <li><a href="#hero"      class="mob-link" aria-label="Home">🏠 Home</a></li>
+          <li><a href="#process"   class="mob-link" aria-label="Election Process">📅 Process</a></li>
+          <li><a href="#steps"     class="mob-link" aria-label="Voting Steps">✅ Steps</a></li>
+          <li><a href="#knowledge" class="mob-link" aria-label="Quiz">🧠 Quiz</a></li>
+          <li><a href="#maps"      class="mob-link" aria-label="Find Station">📍 Find Station</a></li>
+          <li><a href="#assistant" class="mob-link" aria-label="AI Help">🤖 AI Help</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ── MAIN APP ── -->
+  <main id="app-root" class="app-root" role="main">
+
+    <!-- HERO -->
+    <section id="hero" class="section s-hero" aria-labelledby="hero-h1">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <p class="hero-eyebrow" aria-label="Platform subtitle">Democratic Education Platform</p>
+          <h1 id="hero-h1" class="hero-h1">
+            Know Your<br /><span class="accent-stroke">Vote.</span><br />Own Your Democracy.
+          </h1>
+          <p class="hero-body">
+            An immersive, AI-powered guide to the complete election process — built for every citizen who believes their voice matters.
+          </p>
+          <div class="hero-actions" role="group" aria-label="Quick actions">
+            <a href="#process" class="cta-pill primary" aria-label="Explore the election process">
+              <i class="material-icons-round" aria-hidden="true">explore</i> Explore Process
+            </a>
+            <a href="#assistant" class="cta-pill ghost" aria-label="Ask AI assistant about elections">
+              <i class="material-icons-round" aria-hidden="true">chat</i> Ask AI
+            </a>
+          </div>
+          <div class="hero-metrics" role="list" aria-label="Platform statistics">
+            <div class="metric" role="listitem">
+              <b class="metric-val" aria-label="6 election phases">6</b>
+              <span class="metric-lab">Election Phases</span>
+            </div>
+            <div class="metric" role="listitem">
+              <b class="metric-val" aria-label="7 voting steps">7</b>
+              <span class="metric-lab">Voting Steps</span>
+            </div>
+            <div class="metric" role="listitem">
+              <b class="metric-val" aria-label="10 quiz questions">10</b>
+              <span class="metric-lab">Quiz Questions</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="ballot-card">
+            <div class="bc-header">OFFICIAL BALLOT</div>
+            <div class="bc-rows">
+              <div class="bc-row"><span class="bc-dot filled"></span> Candidate A</div>
+              <div class="bc-row"><span class="bc-dot"></span> Candidate B</div>
+              <div class="bc-row"><span class="bc-dot"></span> Candidate C</div>
+            </div>
+            <div class="bc-stamp" aria-hidden="true">✓ VOTED</div>
+          </div>
+          <div class="deco-ring r1" aria-hidden="true"></div>
+          <div class="deco-ring r2" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ELECTION PROCESS TIMELINE -->
+    <section id="process" class="section s-process" aria-labelledby="process-h2">
+      <div class="section-wrap">
+        <header class="section-head" aria-labelledby="process-h2">
+          <p class="s-eyebrow">Phase-by-Phase</p>
+          <h2 id="process-h2">The Election Process</h2>
+          <p class="s-sub">Every democratic election moves through structured phases. Understanding these helps you participate at every stage.</p>
+        </header>
+
+        <div class="process-track" role="list" aria-label="Election process phases">
+          <!-- Phases rendered by JS module -->
+        </div>
+      </div>
+    </section>
+
+    <!-- VOTING STEPS ACCORDION -->
+    <section id="steps" class="section s-steps" aria-labelledby="steps-h2">
+      <div class="section-wrap">
+        <header class="section-head" aria-labelledby="steps-h2">
+          <p class="s-eyebrow">Step by Step</p>
+          <h2 id="steps-h2">How to Cast Your Vote</h2>
+          <p class="s-sub">Follow these seven steps on election day to exercise your democratic right.</p>
+        </header>
+        <div class="accordion" id="steps-accordion" role="list" aria-label="Voting steps accordion">
+          <!-- Accordion items rendered by JS module -->
+        </div>
+      </div>
+    </section>
+
+    <!-- KNOWLEDGE QUIZ (different UI from v1) -->
+    <section id="knowledge" class="section s-quiz" aria-labelledby="quiz-h2">
+      <div class="section-wrap">
+        <header class="section-head" aria-labelledby="quiz-h2">
+          <p class="s-eyebrow">Test Your Knowledge</p>
+          <h2 id="quiz-h2">Civic Knowledge Challenge</h2>
+          <p class="s-sub">10 questions, instant feedback, and a civic score at the end.</p>
+        </header>
+        <div class="quiz-shell" role="region" aria-label="Election knowledge quiz">
+          <div id="quiz-mount" aria-live="polite" aria-atomic="false"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GOOGLE MAPS — FIND POLLING STATION -->
+    <section id="maps" class="section s-maps" aria-labelledby="maps-h2">
+      <div class="section-wrap">
+        <header class="section-head" aria-labelledby="maps-h2">
+          <p class="s-eyebrow">Google Maps Integration</p>
+          <h2 id="maps-h2">Find Your Polling Station</h2>
+          <p class="s-sub">Search for the nearest polling station or election office in your area.</p>
+        </header>
+        <div class="maps-container">
+          <div class="maps-search-row" role="search" aria-label="Polling station search">
+            <label for="location-input" class="sr-only">Enter your location</label>
+            <input
+              type="text"
+              id="location-input"
+              class="location-input"
+              placeholder="Enter your city or address..."
+              aria-label="Enter your location to find nearby polling stations"
+              maxlength="200"
+              autocomplete="street-address"
+            />
+            <button class="location-search-btn" id="location-search-btn" aria-label="Search for polling stations near this location">
+              <i class="material-icons-round" aria-hidden="true">search</i> Search
+            </button>
+          </div>
+          <div class="map-frame-wrap">
+            <iframe
+              id="gmap-embed"
+              src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d15233.0!2d77.5946!3d12.9716!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1spolling+stations+near+me!5e0!3m2!1sen!2sin!4v1714296000000!5m2!1sen!2sin"
+              width="100%"
+              height="440"
+              style="border:0;border-radius:16px;display:block;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Google Map showing polling stations near you"
+              aria-label="Interactive Google Maps showing nearby polling stations and election offices"
+            ></iframe>
+          </div>
+          <p class="maps-note" role="note">
+            <i class="material-icons-round" aria-hidden="true" style="font-size:0.9rem;vertical-align:middle;">info</i>
+            Powered by Google Maps. Always verify with your official election authority.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI ELECTION ASSISTANT -->
+    <section id="assistant" class="section s-assistant" aria-labelledby="assistant-h2">
+      <div class="section-wrap">
+        <header class="section-head" aria-labelledby="assistant-h2">
+          <p class="s-eyebrow">AI-Powered Help</p>
+          <h2 id="assistant-h2">Election Assistant</h2>
+          <p class="s-sub">Ask any question about elections, voting rights, or democratic processes.</p>
+        </header>
+        <div class="chat-frame" role="region" aria-label="AI Election Assistant conversation">
+          <div class="chat-log" id="chat-log" role="log" aria-live="polite" aria-relevant="additions" aria-label="Conversation history"></div>
+          <div class="chat-suggestions" id="chat-suggestions" role="group" aria-label="Suggested questions">
+            <p class="sug-label">Try asking:</p>
+            <div class="sug-pills">
+              <button class="sug-pill" data-prompt="How do I register to vote?" aria-label="Ask: How do I register to vote?">How do I register to vote?</button>
+              <button class="sug-pill" data-prompt="What is a primary election?" aria-label="Ask: What is a primary election?">What is a primary election?</button>
+              <button class="sug-pill" data-prompt="What ID do I need to vote?" aria-label="Ask: What ID do I need to vote?">What ID do I need?</button>
+              <button class="sug-pill" data-prompt="How does vote counting work?" aria-label="Ask: How does vote counting work?">How does vote counting work?</button>
+            </div>
+          </div>
+          <form id="chat-form" class="chat-input-row" aria-label="Ask a question" novalidate>
+            <label for="chat-field" class="sr-only">Type your election question</label>
+            <input
+              id="chat-field"
+              type="text"
+              class="chat-field"
+              placeholder="Ask about elections..."
+              maxlength="400"
+              autocomplete="off"
+              aria-label="Type your election question here"
+              required
+            />
+            <button type="submit" id="chat-submit" class="chat-submit" aria-label="Send your question">
+              <i class="material-icons-round" aria-hidden="true">send</i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTOMATED TEST RESULTS -->
+    <section id="tests" class="section s-tests" aria-labelledby="tests-h2">
+      <div class="section-wrap">
+        <header class="section-head" aria-labelledby="tests-h2">
+          <p class="s-eyebrow">Quality Assurance</p>
+          <h2 id="tests-h2">Automated Tests</h2>
+          <p class="s-sub">Live code quality validation — all tests run automatically on load.</p>
+        </header>
+        <div id="test-output" role="region" aria-live="polite" aria-label="Test results panel">
+          <p class="test-loading" aria-label="Tests loading">⏳ Initializing test suite...</p>
+        </div>
+        <div class="test-actions">
+          <button id="rerun-tests" class="cta-pill primary" aria-label="Re-run all automated tests">
+            <i class="material-icons-round" aria-hidden="true">refresh</i> Re-run Tests
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-foot" role="contentinfo" aria-label="Site footer">
+    <div class="foot-inner">
+      <p class="foot-brand">⚖️ <strong>VoteWise</strong> — Nonpartisan Civic Education</p>
+      <nav aria-label="Footer navigation">
+        <ul class="foot-links" role="list">
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#process">Process</a></li>
+          <li><a href="#steps">Steps</a></li>
+          <li><a href="#knowledge">Quiz</a></li>
+          <li><a href="#assistant">AI Help</a></li>
+        </ul>
+      </nav>
+      <p class="foot-legal">© 2026 VoteWise. For educational purposes only.</p>
+    </div>
+  </footer>
+
+  <!-- BACK TO TOP -->
+  <button id="back-top" class="back-top" aria-label="Scroll back to top of page" title="Back to top" hidden>
+    <i class="material-icons-round" aria-hidden="true">keyboard_arrow_up</i>
+  </button>
+
+  <!-- Google Maps JS API -->
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_PLACEHOLDER_KEY&libraries=places&callback=VoteWise.initMap"
+    onerror="VoteWise.onMapError()">
+  </script>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
