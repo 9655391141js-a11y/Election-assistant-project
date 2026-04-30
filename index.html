@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="DemocraCy — An intelligent, dynamic assistant that guides citizens through the complete election process with AI-powered personalized help." />
+  <meta name="keywords" content="election assistant, how to vote, voter registration, democracy, civic education, polling, election process" />
+  <meta name="author" content="DemocraCy Platform" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#2C1810" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://maps.googleapis.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.anthropic.com https://maps.googleapis.com https://www.googleapis.com https://firestore.googleapis.com https://firebase.googleapis.com; frame-src https://www.google.com;" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="Permissions-Policy" content="geolocation=(self), camera=(), microphone=(), payment=()" />
+  <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="DemocraCy — Smart Election Assistant" />
+  <meta property="og:description" content="AI-powered civic education: understand elections, register to vote, find polling stations." />
+  <meta property="og:locale"      content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="DemocraCy — Smart Election Assistant" />
+  <meta name="twitter:description" content="AI-powered civic education platform" />
+
+  <title>DemocraCy | Smart Election Assistant</title>
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://maps.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+
+  <!-- DNS Prefetch -->
+  <link rel="dns-prefetch" href="https://api.anthropic.com" />
+
+  <!-- Google Fonts — unique for v3 -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+
+  <!-- Firebase SDK v10 compat — loaded early for Firestore availability -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "DemocraCy",
+    "alternateName": "DemocraCy Election Assistant",
+    "description": "An intelligent, dynamic assistant for election process education",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "inLanguage": "en",
+    "audience": { "@type": "Audience", "audienceType": "Citizens, Voters, Civic Education" },
+    "creator": { "@type": "Organization", "name": "DemocraCy Platform" }
+  }
+  </script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="theme-warm">
+
+  <!-- Accessibility skip link -->
+  <a class="skip-link" href="#main" aria-label="Skip to main content">Skip to main content</a>
+
+  <!-- Reading progress indicator -->
+  <div id="read-progress" role="progressbar" aria-label="Page reading progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-hidden="true"></div>
+
+  <!-- ══ TOPBAR ══ -->
+  <header id="topbar" class="topbar" role="banner" aria-label="Site header">
+    <div class="tb-inner">
+      <a href="#hero" class="tb-logo" aria-label="DemocraCy home">
+        <span class="logo-mark" aria-hidden="true">D</span>
+        <span class="logo-word">Democra<em>Cy</em></span>
+      </a>
+
+      <nav class="tb-nav" role="navigation" aria-label="Primary navigation">
+        <a href="#intro"     class="tb-link" data-nav="intro">About</a>
+        <a href="#timeline"  class="tb-link" data-nav="timeline">Timeline</a>
+        <a href="#howto"     class="tb-link" data-nav="howto">How to Vote</a>
+        <a href="#quiz"      class="tb-link" data-nav="quiz">Quiz</a>
+        <a href="#findpoll"  class="tb-link" data-nav="findpoll">Find Polling</a>
+        <a href="#aihelp"    class="tb-link" data-nav="aihelp">AI Help</a>
+      </nav>
+
+      <div class="tb-actions">
+        <button id="theme-btn" class="icon-btn" aria-label="Toggle colour theme" title="Toggle theme">
+          <i class="material-icons-round" aria-hidden="true">light_mode</i>
+        </button>
+        <button id="menu-btn" class="icon-btn mobile-only" aria-label="Open mobile menu" aria-expanded="false" aria-controls="mobile-nav">
+          <i class="material-icons-round" aria-hidden="true">menu</i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile nav -->
+  <nav id="mobile-nav" class="mobile-nav" role="navigation" aria-label="Mobile navigation" aria-hidden="true">
+    <button id="close-nav" class="close-nav" aria-label="Close navigation menu">
+      <i class="material-icons-round" aria-hidden="true">close</i>
+    </button>
+    <ul role="list">
+      <li><a href="#intro"    class="mn-link">🏛️ About</a></li>
+      <li><a href="#timeline" class="mn-link">📅 Timeline</a></li>
+      <li><a href="#howto"    class="mn-link">✅ How to Vote</a></li>
+      <li><a href="#quiz"     class="mn-link">🧠 Quiz</a></li>
+      <li><a href="#findpoll" class="mn-link">📍 Find Polling</a></li>
+      <li><a href="#aihelp"   class="mn-link">🤖 AI Help</a></li>
+    </ul>
+  </nav>
+  <div id="nav-overlay" class="nav-overlay" aria-hidden="true"></div>
+
+  <!-- ══ MAIN ══ -->
+  <main id="main" role="main">
+
+    <!-- HERO -->
+    <section id="hero" class="sec hero-sec" aria-labelledby="hero-heading">
+      <div class="hero-canvas" aria-hidden="true">
+        <div class="hc-grid"></div>
+        <div class="hc-orb orb1"></div>
+        <div class="hc-orb orb2"></div>
+        <div class="hc-orb orb3"></div>
+      </div>
+      <div class="wrap hero-wrap">
+        <div class="hero-badge" aria-label="Platform type badge">
+          <i class="material-icons-round" aria-hidden="true">verified</i>
+          Smart Civic Assistant · Nonpartisan
+        </div>
+        <h1 id="hero-heading" class="hero-h1">
+          Your Intelligent<br />
+          <span class="h1-accent">Election Guide</span>
+        </h1>
+        <p class="hero-p">
+          DemocraCy uses AI to help every citizen understand the election process — from registration to results — with step-by-step guidance tailored to your questions.
+        </p>
+        <div class="hero-btns" role="group" aria-label="Call to action buttons">
+          <a href="#timeline" class="btn-cta solid" aria-label="Explore the election timeline">
+            <i class="material-icons-round" aria-hidden="true">explore</i> Explore Timeline
+          </a>
+          <a href="#aihelp" class="btn-cta outline" aria-label="Open AI Election Assistant">
+            <i class="material-icons-round" aria-hidden="true">smart_toy</i> Ask AI Assistant
+          </a>
+        </div>
+        <div class="hero-kpis" role="list" aria-label="Platform highlights">
+          <div class="kpi" role="listitem"><strong>6</strong><span>Election Phases</span></div>
+          <div class="kpi" role="listitem"><strong>7</strong><span>Voting Steps</span></div>
+          <div class="kpi" role="listitem"><strong>AI</strong><span>Powered Help</span></div>
+          <div class="kpi" role="listitem"><strong>100%</strong><span>Free</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTRO / ABOUT -->
+    <section id="intro" class="sec intro-sec" aria-labelledby="intro-heading">
+      <div class="wrap">
+        <div class="tag-label">Why DemocraCy</div>
+        <h2 id="intro-heading">Democracy Works Best When Everyone Understands It</h2>
+        <div class="intro-grid" role="list" aria-label="Platform features">
+          <article class="intro-card" role="listitem" tabindex="0">
+            <div class="ic-icon" aria-hidden="true"><i class="material-icons-round">psychology</i></div>
+            <h3>Smart &amp; Dynamic</h3>
+            <p>Our AI assistant provides personalized answers based on your specific questions about the election process.</p>
+          </article>
+          <article class="intro-card" role="listitem" tabindex="0">
+            <div class="ic-icon" aria-hidden="true"><i class="material-icons-round">my_location</i></div>
+            <h3>Location-Aware</h3>
+            <p>Find your exact polling station using Google Maps integration with real-time search capabilities.</p>
+          </article>
+          <article class="intro-card" role="listitem" tabindex="0">
+            <div class="ic-icon" aria-hidden="true"><i class="material-icons-round">school</i></div>
+            <h3>Educational</h3>
+            <p>Structured timelines, step-by-step guides, and an interactive quiz reinforce civic knowledge effectively.</p>
+          </article>
+          <article class="intro-card" role="listitem" tabindex="0">
+            <div class="ic-icon" aria-hidden="true"><i class="material-icons-round">security</i></div>
+            <h3>Trustworthy</h3>
+            <p>Nonpartisan, fact-based content from authoritative civic sources. No bias, no agenda — just information.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ELECTION TIMELINE -->
+    <section id="timeline" class="sec timeline-sec" aria-labelledby="tl-heading">
+      <div class="wrap">
+        <div class="tag-label">Election Calendar</div>
+        <h2 id="tl-heading">How Elections Unfold</h2>
+        <p class="sec-sub">Every democratic election follows a predictable calendar. Understanding each phase helps you participate at every stage.</p>
+        <div class="tl-track" id="tl-track" role="list" aria-label="Election timeline phases">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW TO VOTE (stepper) -->
+    <section id="howto" class="sec howto-sec" aria-labelledby="ht-heading">
+      <div class="wrap">
+        <div class="tag-label">Step by Step</div>
+        <h2 id="ht-heading">How to Cast Your Vote</h2>
+        <p class="sec-sub">Follow these seven essential steps to exercise your democratic right on election day.</p>
+        <div class="stepper" id="stepper" role="list" aria-label="Voting steps">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quiz" class="sec quiz-sec" aria-labelledby="qz-heading">
+      <div class="wrap">
+        <div class="tag-label" style="color:#C9A84C;">Test Your Knowledge</div>
+        <h2 id="qz-heading" style="color:#F8F4ED;">Civic Challenge Quiz</h2>
+        <p class="sec-sub" style="color:rgba(248,244,237,.6);">10 questions · Instant feedback · AI-explained answers</p>
+        <div class="quiz-card" role="region" aria-label="Election knowledge quiz">
+          <div id="quiz-root" aria-live="polite" aria-atomic="false"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FIND POLLING STATION (Google Maps) -->
+    <section id="findpoll" class="sec map-sec" aria-labelledby="map-heading">
+      <div class="wrap">
+        <div class="tag-label">Google Maps Integration</div>
+        <h2 id="map-heading">Find Your Polling Station</h2>
+        <p class="sec-sub">Search for your nearest official polling station or election office.</p>
+        <div class="map-box">
+          <div class="map-search" role="search" aria-label="Polling station location search">
+            <label for="map-input" class="sr-only">Enter your location</label>
+            <input
+              id="map-input"
+              type="text"
+              class="map-input"
+              placeholder="Enter your city, area or address..."
+              aria-label="Enter your location to search for nearby polling stations"
+              maxlength="250"
+              autocomplete="street-address"
+              spellcheck="false"
+            />
+            <button id="map-search-btn" class="map-search-btn" aria-label="Search for polling stations near entered location">
+              <i class="material-icons-round" aria-hidden="true">search</i>
+              <span>Search</span>
+            </button>
+          </div>
+          <div class="map-embed-wrap" role="region" aria-label="Google Maps showing polling stations">
+            <iframe
+              id="map-iframe"
+              src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d15545.0!2d80.2707!3d13.0827!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1spolling+station+chennai!5e0!3m2!1sen!2sin!4v1714296000000!5m2!1sen!2sin"
+              width="100%" height="420"
+              style="border:0;border-radius:14px;display:block;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Google Map showing polling stations near you"
+              aria-label="Interactive Google Map showing nearby polling stations and election offices"
+            ></iframe>
+          </div>
+          <p class="map-note" role="note">
+            <i class="material-icons-round" aria-hidden="true" style="font-size:.9rem;vertical-align:middle;">info</i>
+            Powered by Google Maps. Always confirm with your official election authority.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI ASSISTANT -->
+    <section id="aihelp" class="sec ai-sec" aria-labelledby="ai-heading">
+      <div class="wrap">
+        <div class="tag-label">AI-Powered</div>
+        <h2 id="ai-heading">Smart Election Assistant</h2>
+        <p class="sec-sub">Ask any question about elections, voting rights, civic processes, or democratic principles.</p>
+
+        <div class="ai-shell" role="region" aria-label="AI Election Assistant">
+          <!-- Context panel -->
+          <aside class="ai-context" aria-label="Election context topics">
+            <p class="ctx-label">Browse Topics</p>
+            <div class="ctx-topics" role="list" aria-label="Election topics">
+              <!-- Rendered by JS -->
+            </div>
+            <div class="ctx-stat" aria-live="polite" aria-label="Questions asked counter" id="chat-counter">
+              <i class="material-icons-round" aria-hidden="true">chat</i>
+              <span id="counter-num">0</span> questions asked
+            </div>
+          </aside>
+
+          <!-- Chat panel -->
+          <div class="ai-chat">
+            <div class="chat-history" id="chat-history" role="log" aria-live="polite" aria-relevant="additions" aria-label="Conversation history"></div>
+            <form id="chat-form" class="chat-bar" aria-label="Ask election question" novalidate>
+              <label for="chat-input" class="sr-only">Type your election question</label>
+              <input
+                id="chat-input"
+                type="text"
+                class="chat-input"
+                placeholder="Ask about elections..."
+                maxlength="400"
+                autocomplete="off"
+                aria-label="Type your election question here"
+                required
+              />
+              <button type="submit" id="chat-send" class="chat-send" aria-label="Send question to AI assistant">
+                <i class="material-icons-round" aria-hidden="true">send</i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTOMATED TEST RESULTS -->
+    <section id="testlab" class="sec test-sec" aria-labelledby="test-heading">
+      <div class="wrap">
+        <div class="tag-label">Quality Assurance</div>
+        <h2 id="test-heading">Automated Test Suite</h2>
+        <p class="sec-sub">All tests run automatically on page load. Validates code quality, accessibility, Google services, and logic.</p>
+        <div id="test-panel" role="region" aria-live="polite" aria-label="Test results dashboard">
+          <div class="test-init" aria-label="Tests initializing">
+            <div class="spinner" aria-hidden="true"></div>
+            <p>Initialising test suite…</p>
+          </div>
+        </div>
+        <div class="test-rerun">
+          <button id="rerun-btn" class="btn-cta solid small" aria-label="Re-run all automated tests">
+            <i class="material-icons-round" aria-hidden="true">refresh</i> Re-run All Tests
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo" aria-label="Site footer">
+    <div class="wrap foot-wrap">
+      <div class="foot-brand">
+        <span class="logo-mark sm" aria-hidden="true">D</span>
+        <span>Democra<em>Cy</em> — Nonpartisan Civic Education</span>
+      </div>
+      <nav aria-label="Footer links">
+        <ul class="foot-links" role="list">
+          <li><a href="#timeline">Timeline</a></li>
+          <li><a href="#howto">How to Vote</a></li>
+          <li><a href="#quiz">Quiz</a></li>
+          <li><a href="#findpoll">Find Polling</a></li>
+          <li><a href="#aihelp">AI Help</a></li>
+          <li><a href="#testlab">Tests</a></li>
+        </ul>
+      </nav>
+      <p class="foot-copy">© 2026 DemocraCy. For educational purposes only. Not affiliated with any political party.</p>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <button id="btt" class="btt" aria-label="Scroll back to top" title="Back to top" hidden>
+    <i class="material-icons-round" aria-hidden="true">arrow_upward</i>
+  </button>
+
+  <!-- Google Maps JS API -->
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_PLACEHOLDER&libraries=places&callback=DCy.onMapLoad"
+    onerror="DCy.onMapError()">
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>
